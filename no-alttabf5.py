@@ -48,10 +48,9 @@ for changes in watch("."):
     winname = getWindowName(targetWin)
     if winpat and not re.match(winpat, winname):
         continue
-    for e in changes:
-        filename = e[1]
-        if not included(filename):
-            continue
+
+    reload = any([included(e[1]) for e in changes])
+    if reload:
         curWin = xdo.get_active_window()
         xdo.focus_window(targetWin)
         xdo.send_keysequence_window(targetWin, key.encode("utf-8"))
