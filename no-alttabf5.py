@@ -1,20 +1,23 @@
+version = "1.0.1"
 
 import re
 import argparse
 from os import path
-from sys import argv
+from sys import argv, exit
 from watchgod import watch
 from xdo import Xdo
 xdo = Xdo()
 
-desc = "Send keypress events when selected files are modified"
+progname = path.basename(argv[0])
+desc = "{} - Send keypress events when selected files are modified".format(progname)
 argparser = argparse.ArgumentParser(description=desc)
-argparser.add_argument("filenames",   type=str,   nargs="+", help="filenames to include")
+argparser.add_argument("filenames",   type=str,   nargs="*", help="filenames to include")
 argparser.add_argument("--filenames", type=str,   nargs="+", help="filenames to include")
 argparser.add_argument("--filepat",   default="", type=str,  help="filename regex to include")
 argparser.add_argument("--xfilepat",  default="", type=str,  help="filename regex to exclude")
 argparser.add_argument("--winpat",    default="", type=str,
         help="a window name regex, reload only when selected window has the matching regex")
+argparser.add_argument("--version",   action="store_true", help="show version")
 args = argparser.parse_args()
 
 filepat   = args.filepat or None
@@ -37,6 +40,14 @@ def getWindowName(winId):
     if name:
         return name.decode("utf-8")
     return ""
+
+if args.version:
+    print("{} v{}".format(progname, version))
+    exit()
+
+if not (filenames or filepat or xfilepat):
+    argparser.print_help()
+    exit()
 
 print("(!) select window to send keypress events ...")
 targetWin = xdo.select_window_with_click()
