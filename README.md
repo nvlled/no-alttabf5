@@ -1,6 +1,8 @@
 # no-alttabf5
 A python tool to refresh the browser when a file is modified.
 
+![demo](demo.gif)
+
 # installation
 1. Download [binary release](https://github.com/nvlled/no-alttabf5/releases/download/v1.0/no-alttabf5)
 2. chmod 755 no-alttabf5
