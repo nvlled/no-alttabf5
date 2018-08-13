@@ -1,5 +1,6 @@
-version = "1.0.1"
+version = "1.0.2"
 
+import time
 import re
 import argparse
 from os import path
@@ -15,6 +16,7 @@ argparser.add_argument("filenames",   type=str,   nargs="*", help="filenames to 
 argparser.add_argument("--filenames", type=str,   nargs="+", help="filenames to include")
 argparser.add_argument("--filepat",   default="", type=str,  help="filename regex to include")
 argparser.add_argument("--xfilepat",  default="", type=str,  help="filename regex to exclude")
+argparser.add_argument("--delay",     default=0,  type=float,  help="number of seconds to delay refresh")
 argparser.add_argument("--winpat",    default="", type=str,
         help="a window name regex, reload only when selected window has the matching regex")
 argparser.add_argument("--version",   action="store_true", help="show version")
@@ -61,6 +63,7 @@ for changes in watch("."):
         continue
 
     reload = any([included(e[1]) for e in changes])
+    time.sleep(args.delay)
     if reload:
         curWin = xdo.get_active_window()
         xdo.focus_window(targetWin)
